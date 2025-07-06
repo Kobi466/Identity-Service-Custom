@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+        context-path: /web
+
+spring:
+    datasource:
+      url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/web_elearning?useSSL=false&serverTimezone=UTC}
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: ${DBMS_USERNAME :root}
+      password: ${DBMS_PASSWORD :123456}
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
