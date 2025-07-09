@@ -1,8 +1,11 @@
 package com.kobi.elearning.controller;
 
 
+import java.util.List;
+
 import jakarta.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.kobi.elearning.dto.request.UserUpdateRequest;
@@ -14,15 +17,28 @@ import com.kobi.elearning.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 @FieldDefaults (level = AccessLevel.PRIVATE, makeFinal = true)
+@Log4j2
 public class UserController {
 	UserService userService;
 	@PutMapping("/{id}")
 	public ApiResponse<UserResponse> updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateRequest request) {
 		return ApiResponse.ok( userService.updateUser(id, request), SuccessCode.USER_UPDATED);
+	}
+
+	@GetMapping("/me")
+	public ApiResponse<UserResponse> getUser() {
+		return ApiResponse.ok(userService.getMyInformation(), SuccessCode.USER_CREATED);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping
+	public ApiResponse<List<UserResponse>> getUsers() {
+		return ApiResponse.ok(userService.getUsers(), SuccessCode.USER_FETCH_SUCCESS);
 	}
 }

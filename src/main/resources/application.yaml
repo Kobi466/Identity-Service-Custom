@@ -5,7 +5,7 @@ server:
 
 spring:
     datasource:
-      url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/web_elearning?useSSL=false&serverTimezone=UTC}
+      url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/web_elearning}
       driverClassName: com.mysql.cj.jdbc.Driver
       username: ${DBMS_USERNAME :root}
       password: ${DBMS_PASSWORD :123456}
@@ -13,3 +13,8 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
+jwt:
+  secret: "1t4tdHV+IQYZ6gb4udXyXsVwvJHMKhTrqRoXnQCG0Y9rtwfIF8zI1I26aaqOOBaL"
+  access-token-expiration: 3600000  # 1 hour in milliseconds
+  refresh-token-expiration: 604800000  # 7 days in milliseconds
+

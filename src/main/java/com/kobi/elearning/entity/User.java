@@ -22,16 +22,6 @@ public class User {
 	String userName;
 	String passWord;
 	String fullName;
-//    Long yearOfBirth;
-//    Sex sex;
-//    String bio;
-//    @Column(unique = true, nullable = false)
-//    String email;
-//    @Column(unique = true, nullable = false)
-//    String phoneNumber;
-//    String avatar;
 	@ManyToMany
 	Set<Role> roles;
-
-
 }

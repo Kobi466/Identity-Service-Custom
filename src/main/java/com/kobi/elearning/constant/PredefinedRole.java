@@ -1,8 +1,8 @@
 package com.kobi.elearning.constant;
 
 public class PredefinedRole {
-	public static final String ADMIN = "ROLE_ADMIN";
-	public static final String TEACHER = "ROLE_TEACHER";
-	public static final String STUDENT = "ROLE_STUDENT";
-	public static final String MENTOR = "ROLE_MENTOR";
+	public static final String ADMIN = "ADMIN";
+	public static final String TEACHER = "TEACHER";
+	public static final String STUDENT = "STUDENT";
+	public static final String MENTOR = "MENTOR";
 }

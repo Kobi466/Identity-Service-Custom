@@ -11,6 +11,8 @@ public enum ErrorCode {
 	PASSWORD_INVALID(203,"Password is invalid", HttpStatus.BAD_REQUEST),
 	VALIDATION_ERROR(204, "Validation error", HttpStatus.BAD_REQUEST),
 	USER_NOT_FOUND(205, "User not found", HttpStatus.NOT_FOUND),
+	FAILED_TOKEN(206, "Failed to generate token", HttpStatus.INTERNAL_SERVER_ERROR),
+	AUTHENTICATION_FAILED(207, "Authentication failed", HttpStatus.UNAUTHORIZED),
 	;
 
 	private final int status;

@@ -1,6 +1,10 @@
 package com.kobi.elearning.service;
 
 
+import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.kobi.elearning.dto.request.UserUpdateRequest;
@@ -39,4 +43,21 @@ public class UserService {
 			throw new AppException(ErrorCode.USER_NOT_FOUND);
 		}
 	}
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('USER_VIEW')")
+	public UserResponse getMyInformation() {
+		var authentication = SecurityContextHolder.getContext();
+		String userId = ((org.springframework.security.oauth2.jwt.Jwt) authentication.getAuthentication().getPrincipal()).getSubject();
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+		return userMapper.toUserResponse(user);
+	}
+
+	public List<UserResponse> getUsers() {
+		log.info("Fetching all users");
+		return userRepository.findAll().stream()
+				.map(userMapper::toUserResponse)
+				.toList();
+	}
+
 }
