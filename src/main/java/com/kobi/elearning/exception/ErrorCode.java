@@ -13,6 +13,10 @@ public enum ErrorCode {
 	USER_NOT_FOUND(205, "User not found", HttpStatus.NOT_FOUND),
 	FAILED_TOKEN(206, "Failed to generate token", HttpStatus.INTERNAL_SERVER_ERROR),
 	AUTHENTICATION_FAILED(207, "Authentication failed", HttpStatus.UNAUTHORIZED),
+	UNAUTHORIZED(208, "Unauthorized access", HttpStatus.UNAUTHORIZED),
+	UNCATEGORIZED_EXCEPTION(209, "Uncategorized exception", HttpStatus.INTERNAL_SERVER_ERROR),
+	REFRESH_TOKEN_ALREADY_USED_OR_REVOKED (210, "Refresh token already used or revoked", HttpStatus.UNAUTHORIZED),
+	INVALID_REFRESH_TOKEN (210, "Invalid refresh token", HttpStatus.UNAUTHORIZED),
 	;
 
 	private final int status;

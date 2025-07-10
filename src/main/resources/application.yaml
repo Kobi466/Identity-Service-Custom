@@ -17,4 +17,3 @@ jwt:
   secret: "1t4tdHV+IQYZ6gb4udXyXsVwvJHMKhTrqRoXnQCG0Y9rtwfIF8zI1I26aaqOOBaL"
   access-token-expiration: 3600000  # 1 hour in milliseconds
   refresh-token-expiration: 604800000  # 7 days in milliseconds
-

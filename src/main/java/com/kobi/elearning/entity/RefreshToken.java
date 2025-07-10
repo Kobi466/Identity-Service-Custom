@@ -1,7 +1,7 @@
 package com.kobi.elearning.entity;
 
 
-import java.time.Instant;
+import java.util.Date;
 
 import jakarta.persistence.*;
 
@@ -17,11 +17,19 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Builder
 public class RefreshToken {
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
+	@Column(nullable = false, unique = true, length = 1000)
 	String token;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	User user;
 	@Column(nullable = false)
-	Instant expiryTime;
+	Date expiryTime;
+	@Column(nullable = false)
+	boolean revoked = false;
+	@Column(nullable = false)
+	boolean used;
+	@Column(nullable = false)
+	Date createdAt;
 }

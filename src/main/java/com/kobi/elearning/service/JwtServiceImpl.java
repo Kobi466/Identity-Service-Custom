@@ -1,12 +1,12 @@
 package com.kobi.elearning.service;
 
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtServiceImpl implements JwtService {
-	private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
+
 	@Value("${jwt.secret}")
 	String secretKey;
 	@Value("${jwt.access-token-expiration}")
@@ -79,6 +79,10 @@ public class JwtServiceImpl implements JwtService {
 
 	@Override
 	public boolean validateToken(String token) {
+		if (token == null || token.isBlank()) {
+			log.warn("Token is null or blank");
+			return false;
+		}
 		try {
 			SignedJWT signedJWT = SignedJWT.parse(token);
 			JWSVerifier verifier = new MACVerifier(secretKey);
@@ -123,6 +127,27 @@ public class JwtServiceImpl implements JwtService {
 		try {
 			SignedJWT signedJWT = SignedJWT.parse(token);
 			return signedJWT.getJWTClaimsSet().getSubject();
+		} catch (ParseException e) {
+			log.error("Failed to parse token: {}", e.getMessage());
+			throw new AppException(ErrorCode.FAILED_TOKEN);
+		}
+	}
+	@Override
+	public Date getExpirationDateFromToken(String token) {
+		try {
+			SignedJWT signedJWT = SignedJWT.parse(token);
+			return signedJWT.getJWTClaimsSet().getExpirationTime();
+		} catch (ParseException e) {
+			log.error("Failed to parse token: {}", e.getMessage());
+			throw new AppException(ErrorCode.FAILED_TOKEN);
+		}
+	}
+
+	@Override
+	public Date getIssuedAtDateFromToken(String token) {
+		try {
+			SignedJWT signedJWT = SignedJWT.parse(token);
+			return signedJWT.getJWTClaimsSet().getIssueTime();
 		} catch (ParseException e) {
 			log.error("Failed to parse token: {}", e.getMessage());
 			throw new AppException(ErrorCode.FAILED_TOKEN);

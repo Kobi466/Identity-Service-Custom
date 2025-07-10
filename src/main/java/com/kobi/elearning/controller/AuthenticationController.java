@@ -1,5 +1,6 @@
 package com.kobi.elearning.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,13 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kobi.elearning.dto.request.AuthCreateRequest;
-import com.kobi.elearning.dto.request.IntrospectRequest;
-import com.kobi.elearning.dto.request.LoginRequest;
-import com.kobi.elearning.dto.response.ApiResponse;
-import com.kobi.elearning.dto.response.AuthenticationResponse;
-import com.kobi.elearning.dto.response.IntrospectResponse;
-import com.kobi.elearning.dto.response.UserResponse;
+import com.kobi.elearning.dto.request.*;
+import com.kobi.elearning.dto.response.*;
 import com.kobi.elearning.exception.SuccessCode;
 import com.kobi.elearning.service.AuthenticationService;
 
@@ -34,12 +30,23 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login")
-	ApiResponse<AuthenticationResponse> login(@RequestBody LoginRequest request) {
+	ApiResponse<AuthenticationResponse> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
 		return ApiResponse.ok(authenticationService.authenticate(request), SuccessCode.LOGIN_SUCCESS);
 	}
 
 	@PostMapping("/introspect")
 	ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) {
 		return ApiResponse.ok(authenticationService.introspect(request), SuccessCode.INTROSPECT_SUCCESS);
+	}
+
+	@PostMapping("/refresh")
+	ApiResponse<RefreshTokenResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+		return ApiResponse.ok(authenticationService.refreshToken(request), SuccessCode.REFRESH_TOKEN_SUCCESS);
+	}
+
+	@PostMapping("/logout")
+	ApiResponse<Void> logout( @Valid @RequestBody LogoutRequest request) {
+		authenticationService.logout(request);
+		return ApiResponse.ok(null, SuccessCode.LOGOUT_SUCCESS);
 	}
 }

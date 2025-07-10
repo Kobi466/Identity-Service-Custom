@@ -9,5 +9,4 @@ import com.kobi.elearning.entity.Permission;
 public interface PermissionMapper {
 	Permission toPermission(PermissionResponse response);
 	PermissionResponse toRoleResponse(Permission role);
-
 }

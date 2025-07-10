@@ -1,8 +1,11 @@
 package com.kobi.elearning.service;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 
 import com.kobi.elearning.entity.User;
+
 
 @Service
 public interface JwtService {
@@ -13,4 +16,8 @@ public interface JwtService {
 	boolean validateToken(String token);
 
 	String getIdFromToken(String token);
+
+	Date getExpirationDateFromToken(String token);
+
+	Date getIssuedAtDateFromToken(String token);
 }

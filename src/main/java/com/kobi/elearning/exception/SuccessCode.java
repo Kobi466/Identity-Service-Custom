@@ -13,6 +13,8 @@ public enum SuccessCode {
 	LOGIN_SUCCESS(1003, "Login successful", HttpStatus.OK),
 	INTROSPECT_SUCCESS(1004, "Introspection successful", HttpStatus.OK),
 	USER_FETCH_SUCCESS(1005, "User fetched successfully", HttpStatus.OK),
+	REFRESH_TOKEN_SUCCESS(1006, "Refresh token successful", HttpStatus.OK),
+	LOGOUT_SUCCESS(1007, "Logout successful", HttpStatus.OK)
 	;
 
 	private final int status;

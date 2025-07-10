@@ -1,6 +1,7 @@
 package com.kobi.elearning.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class AdminInitializer implements CommandLineRunner {
 			admin.setPassWord(passwordEncoder.encode("admin123"));
 			admin.setFullName("Administrator");
 			Role adminRole = roleRepository.findByName(PredefinedRole.ADMIN);
-			admin.setRoles(new HashSet<>(Arrays.asList(adminRole)));
+			admin.setRoles(new HashSet<>(Collections.singletonList(adminRole)));
 			userRepository.save(admin);
 		}
 	}
