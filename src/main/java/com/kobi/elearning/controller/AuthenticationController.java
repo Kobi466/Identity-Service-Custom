@@ -8,8 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kobi.elearning.dto.request.*;
+import com.kobi.elearning.dto.request.auth.IntrospectRequest;
+import com.kobi.elearning.dto.request.auth.LoginRequest;
+import com.kobi.elearning.dto.request.auth.LogoutRequest;
+import com.kobi.elearning.dto.request.auth.RefreshTokenRequest;
 import com.kobi.elearning.dto.response.*;
+import com.kobi.elearning.dto.response.auth.AuthenticationResponse;
+import com.kobi.elearning.dto.response.auth.IntrospectResponse;
+import com.kobi.elearning.dto.response.auth.RefreshTokenResponse;
 import com.kobi.elearning.exception.SuccessCode;
 import com.kobi.elearning.service.AuthenticationService;
 
@@ -24,19 +30,14 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticationController {
 	AuthenticationService authenticationService;
 
-	@PostMapping("/register")
-	ApiResponse<UserResponse> register(@Valid @RequestBody AuthCreateRequest request) {
-		return ApiResponse.ok(authenticationService.createUser(request), SuccessCode.USER_CREATED);
-	}
-
 	@PostMapping("/login")
 	ApiResponse<AuthenticationResponse> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
-		return ApiResponse.ok(authenticationService.authenticate(request), SuccessCode.LOGIN_SUCCESS);
+		return ApiResponse.ok(authenticationService.authenticateUser(request), SuccessCode.LOGIN_SUCCESS);
 	}
 
 	@PostMapping("/introspect")
 	ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) {
-		return ApiResponse.ok(authenticationService.introspect(request), SuccessCode.INTROSPECT_SUCCESS);
+		return ApiResponse.ok(authenticationService.introspectToken(request), SuccessCode.INTROSPECT_SUCCESS);
 	}
 
 	@PostMapping("/refresh")
@@ -46,7 +47,7 @@ public class AuthenticationController {
 
 	@PostMapping("/logout")
 	ApiResponse<Void> logout( @Valid @RequestBody LogoutRequest request) {
-		authenticationService.logout(request);
+		authenticationService.revokedToken(request);
 		return ApiResponse.ok(null, SuccessCode.LOGOUT_SUCCESS);
 	}
 }

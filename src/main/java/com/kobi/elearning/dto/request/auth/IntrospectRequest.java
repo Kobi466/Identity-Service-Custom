@@ -1,4 +1,4 @@
-package com.kobi.elearning.dto.request;
+package com.kobi.elearning.dto.request.auth;
 
 import lombok.Builder;
 import lombok.Data;

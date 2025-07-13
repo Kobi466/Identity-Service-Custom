@@ -1,4 +1,4 @@
-package com.kobi.elearning.dto.request;
+package com.kobi.elearning.dto.request.auth;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class LoginRequest {
-	String userName;
-	String passWord;
+public class RefreshTokenRequest {
+	String token;
 }

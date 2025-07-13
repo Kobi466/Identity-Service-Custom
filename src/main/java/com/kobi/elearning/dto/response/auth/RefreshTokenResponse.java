@@ -1,4 +1,4 @@
-package com.kobi.elearning.dto.response;
+package com.kobi.elearning.dto.response.auth;
 
 import java.util.Date;
 

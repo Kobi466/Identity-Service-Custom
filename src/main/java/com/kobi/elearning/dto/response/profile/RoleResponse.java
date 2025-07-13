@@ -1,4 +1,4 @@
-package com.kobi.elearning.dto.response;
+package com.kobi.elearning.dto.response.profile;
 
 import java.util.Set;
 
@@ -10,9 +10,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-	String id;
-	String userName;
-	String fullName;
-	Set<RoleResponse> roles;
+public class RoleResponse {
+	String name;
+	String description;
+	Set<PermissionResponse> permissions;
 }

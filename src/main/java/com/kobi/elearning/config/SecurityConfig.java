@@ -20,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	private static final String[] PUBLIC_URLS = {
 			"/api/v1/auth/login",
-			"/api/v1/auth/register",
+			"/api/v1/users/register",
 			"/api/v1/auth/introspect",
 			"/api/v1/auth/logout",
 			"/api/v1/auth/refresh",

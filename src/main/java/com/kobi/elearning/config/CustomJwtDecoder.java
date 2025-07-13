@@ -12,10 +12,8 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import com.kobi.elearning.dto.request.IntrospectRequest;
-import com.kobi.elearning.dto.response.IntrospectResponse;
+import com.kobi.elearning.dto.request.auth.IntrospectRequest;
 import com.kobi.elearning.service.AuthenticationService;
-import com.kobi.elearning.service.JwtServiceImpl;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
@@ -29,7 +27,7 @@ public class CustomJwtDecoder implements JwtDecoder {
 
 	@Override
 	public Jwt decode(String token) throws JwtException {
-		var response = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
+		var response = authenticationService.introspectToken(IntrospectRequest.builder().token(token).build());
 		if (!response.isValid()){
 			throw new JwtException("Token is not valid");
 		}

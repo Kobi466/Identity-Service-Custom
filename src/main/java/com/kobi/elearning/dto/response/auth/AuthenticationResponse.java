@@ -1,7 +1,8 @@
-package com.kobi.elearning.dto.response;
+package com.kobi.elearning.dto.response.auth;
 
-import java.time.Instant;
 import java.util.Date;
+
+import com.kobi.elearning.dto.response.profile.UserResponse;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
