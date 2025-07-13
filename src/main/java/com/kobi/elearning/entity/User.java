@@ -1,5 +1,6 @@
 package com.kobi.elearning.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -24,4 +25,6 @@ public class User {
 	String fullName;
 	@ManyToMany
 	Set<Role> roles;
+	@ManyToMany(mappedBy = "users")
+	List<Course> courses;
 }

@@ -1,5 +1,7 @@
 package com.kobi.elearning.dto.request.profile;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -15,4 +17,5 @@ public class UserUpdateRequest {
 	String userName;
 	@Size(min = 2, message = "Full name must be at least {min} characters")
 	String fullName;
+	List<String> roles;
 }

@@ -154,4 +154,9 @@ public class JwtServiceImpl implements JwtService {
 			throw new AppException(ErrorCode.FAILED_TOKEN);
 		}
 	}
+
+	@Override
+	public long getExpirationTimeFromToken(String token) {
+		return getExpirationDateFromToken(token).getTime() - System.currentTimeMillis();
+	}
 }

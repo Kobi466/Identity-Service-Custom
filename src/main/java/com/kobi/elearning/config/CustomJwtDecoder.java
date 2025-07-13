@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.kobi.elearning.dto.request.auth.IntrospectRequest;
 import com.kobi.elearning.service.AuthenticationService;
+import com.kobi.elearning.service.RedisService;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
@@ -23,10 +24,16 @@ public class CustomJwtDecoder implements JwtDecoder {
 	@Autowired
 	private AuthenticationService authenticationService;
 
+	@Autowired
+	private RedisService redisService;
+
 	private NimbusJwtDecoder nimbusJwtDecoder;
 
 	@Override
 	public Jwt decode(String token) throws JwtException {
+		if (redisService.isBlackListed(token)) {
+			throw new JwtException("Token is not valid");
+		}
 		var response = authenticationService.introspectToken(IntrospectRequest.builder().token(token).build());
 		if (!response.isValid()){
 			throw new JwtException("Token is not valid");

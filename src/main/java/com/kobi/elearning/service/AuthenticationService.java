@@ -12,8 +12,11 @@ import com.kobi.elearning.dto.response.auth.RefreshTokenResponse;
 
 @Service
 public interface AuthenticationService {
-	public AuthenticationResponse authenticateUser(LoginRequest loginRequest);
-	public RefreshTokenResponse refreshToken(RefreshTokenRequest request);
-	public IntrospectResponse introspectToken(IntrospectRequest request);
-	public void revokedToken(LogoutRequest request);
+	AuthenticationResponse authenticateUser(LoginRequest loginRequest);
+
+	RefreshTokenResponse refreshToken(RefreshTokenRequest request);
+
+	IntrospectResponse introspectToken(IntrospectRequest request);
+
+	void revokedToken(LogoutRequest request);
 }

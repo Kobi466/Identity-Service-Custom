@@ -20,4 +20,6 @@ public interface JwtService {
 	Date getExpirationDateFromToken(String token);
 
 	Date getIssuedAtDateFromToken(String token);
+
+	long getExpirationTimeFromToken(String token);
 }

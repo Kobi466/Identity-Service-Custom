@@ -1,6 +1,7 @@
 package com.kobi.elearning.service.implement;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import com.kobi.elearning.repository.RoleRepository;
 import com.kobi.elearning.repository.UserRepository;
 import com.kobi.elearning.service.AuthenticationService;
 import com.kobi.elearning.service.JwtService;
+import com.kobi.elearning.service.RedisService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationServiceImpl implements AuthenticationService{
 	UserRepository userRepository;
 	UserMapper userMapper;
-	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
 	JwtService jwtService;
 	RefreshTokenRepository refreshTokenRepository;
+	RedisService redisService;
 
 	@Override
 	public AuthenticationResponse authenticateUser(LoginRequest request) {
@@ -50,23 +52,23 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 			log.error("Authentication failed for user {}", request.getUserName());
 			throw new AppException(ErrorCode.AUTHENTICATION_FAILED);
 		}
-		String r_token = jwtService.generateRefreshToken(user);
-		String idUser = jwtService.getIdFromToken(r_token);
+		String refreshToken = jwtService.generateRefreshToken(user);
+		String idUser = jwtService.getIdFromToken(refreshToken);
 		User oneuser = userRepository.findById(idUser)
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 		refreshTokenRepository.save(RefreshToken.builder()
 				.user(oneuser)
-				.token(r_token)
-				.expiryTime(jwtService.getExpirationDateFromToken(r_token))
+				.token(refreshToken)
+				.expiryTime(jwtService.getExpirationDateFromToken(refreshToken))
 				.used(false)
 				.revoked(false)
-				.createdAt(jwtService.getIssuedAtDateFromToken(r_token))
+				.createdAt(jwtService.getIssuedAtDateFromToken(refreshToken))
 				.build()
 		);
 		return AuthenticationResponse.builder()
 				.accessToken(jwtService.generateAccessToken(user))
-				.refreshToken(r_token)
-				.expiresAt(jwtService.getExpirationDateFromToken(r_token))
+				.refreshToken(refreshToken)
+				.expiresAt(jwtService.getExpirationDateFromToken(refreshToken))
 				.user(userMapper.toUserResponse(user))
 				.build();
 	}
@@ -87,6 +89,11 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 		if (reFreshToken.isUsed() || reFreshToken.isRevoked() ) {
 			log.error("Refresh token has already been used or revoked: {}", request.getToken());
 			throw new AppException(ErrorCode.REFRESH_TOKEN_ALREADY_USED_OR_REVOKED);
+		}
+		Date issuedAt = jwtService.getExpirationDateFromToken(request.getToken());
+		if (reFreshToken.getExpiryTime().before(new java.util.Date())) {
+			log.error("Refresh token has expired: {}", request.getToken());
+			throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
 		}
 		reFreshToken.setUsed(true);
 		reFreshToken.setRevoked(true);
@@ -115,11 +122,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
 	@Override
 	public void revokedToken (LogoutRequest request){
-//		boolean isValid = jwtService.validateToken(request.getToken());
-//		if (!isValid) {
-//			log.error("Invalid access token: {}", request.getToken());
-//			throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
-//		}
+		boolean isValid = jwtService.validateToken(request.getToken());
+		if (!isValid) {
+			log.error("Invalid access token: {}", request.getToken());
+			throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
+		}
+		redisService.blackListAccessToken(request.getToken(), jwtService.getExpirationTimeFromToken(request.getToken()));
 		String userId = jwtService.getIdFromToken(request.getToken());
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
