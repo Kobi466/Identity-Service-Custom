@@ -1,19 +1,23 @@
 server:
   port: 8080
   servlet:
-        context-path: /web
+    context-path: /web
 
 spring:
-    datasource:
-      url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/web_elearning}
-      driverClassName: com.mysql.cj.jdbc.Driver
-      username: ${DBMS_USERNAME :root}
-      password: ${DBMS_PASSWORD :123456}
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/web_elearning}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DBMS_USERNAME :root}
+    password: ${DBMS_PASSWORD :123456}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 jwt:
-  secret: "1t4tdHV+IQYZ6gb4udXyXsVwvJHMKhTrqRoXnQCG0Y9rtwfIF8zI1I26aaqOOBaL"
-  access-token-expiration: 3600000  # 1 hour in milliseconds
+  secret: ${JWT_SECRET}
+  access-token-expiration: 300000  # 15 minute in milliseconds
   refresh-token-expiration: 604800000  # 7 days in milliseconds
