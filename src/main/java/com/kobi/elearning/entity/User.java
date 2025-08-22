@@ -25,8 +25,6 @@ public class User {
 	String fullName;
 	@ManyToMany
 	Set<Role> roles;
-	@ManyToMany(mappedBy = "users")
-	List<Course> courses;
 	@Column(nullable = false)
 	@Builder.Default
 	Boolean oauth2Account = false;
